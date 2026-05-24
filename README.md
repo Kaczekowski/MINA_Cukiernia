@@ -122,13 +122,71 @@ Uruchomienie testów:
 ```bash
 uv run pytest
 ```
+## Pre-commit i kontrola jakości kodu
 
-Sprawdzenie jakości kodu, jeśli używacie `ruff`:
+Projekt wykorzystuje `pre-commit` oraz `ruff` do automatycznej kontroli jakości kodu.
+
+Hooki uruchamiają się automatycznie przed każdym commitem i sprawdzają między innymi:
+
+- formatowanie kodu,
+- błędy składni,
+- trailing whitespace,
+- poprawne zakończenia plików,
+- podstawowe problemy wykrywane przez `ruff`.
+
+## Instalacja hooków
+
+Jednorazowo po sklonowaniu repozytorium należy wykonać:
+
+```bash
+uv sync
+```
+
+Następnie zainstalować hooki:
+
+```bash
+uv run pre-commit install
+```
+
+## Ręczne uruchomienie pre-commit
+
+Sprawdzenie wszystkich plików:
+
+```bash
+uv run pre-commit run --all-files
+```
+
+## Ruff
+
+Sprawdzenie jakości kodu:
 
 ```bash
 uv run ruff check .
 ```
 
-## Autorzy
+Automatyczne formatowanie kodu:
 
-Projekt tworzony zespołowo w ramach ćwiczenia pracy z repozytorium GitHub.
+```bash
+uv run ruff format .
+```
+
+## GitHub Actions
+
+Repozytorium wykorzystuje GitHub Actions do automatycznego sprawdzania projektu po:
+
+- pushu na branch `main`,
+- utworzeniu Pull Requesta.
+
+Pipeline wykonuje:
+
+- instalację zależności przez `uv`,
+- uruchomienie `pre-commit`,
+- sprawdzenie jakości kodu,
+- testy projektu.
+
+Dzięki temu łatwiej utrzymać jednolity styl kodu i uniknąć błędów przed mergem zmian.
+
+
+
+
+## Autorzy
