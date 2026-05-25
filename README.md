@@ -50,7 +50,7 @@ uv sync
 ## Uruchomienie projektu
 
 ```bash
-uv run uvicorn main:app --reload
+uv run uvicorn backend.main:app --reload
 ```
 
 Aplikacja będzie dostępna pod adresem:
@@ -78,10 +78,25 @@ MINA_CUKIERNIA/
 ├── .github/
 │   └── workflows/
 │       └── pre-commit.yml
-├── src/
-│   └── cukiernia/
-├── main.py
-├── test.py
+│
+├── backend/
+│   └── main.py
+│   └── api/
+│       └── endpoints/
+│   └── db/
+│   └── models/
+│   └── schemas/
+│   └── services/
+│   └── utils/
+│
+├── frontend/
+│   └── assets/
+│   └── index.html
+│   └── app.js
+│   └── style.css
+│
+├── tests/
+│
 ├── pyproject.toml
 ├── uv.lock
 ├── .python-version
