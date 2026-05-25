@@ -31,7 +31,9 @@ def get_stats(db: Session):
 
 
 def read_save(db: Session):
-    return get_or_create_player(db)
+    player = get_or_create_player(db)
+    stats = get_stats(db)
+    return player, stats
 
 
 def save_game(db: Session, data):
@@ -56,7 +58,7 @@ def save_game(db: Session, data):
     db.commit()
     db.refresh(player)
 
-    return player
+    return player, stats
 
 
 def reset_save(db: Session):

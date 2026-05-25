@@ -320,6 +320,7 @@ source = { virtual = "." }
 dependencies = [
     { name = "fastapi" },
     { name = "jinja2" },
+    { name = "pydantic" },
     { name = "python-multipart" },
     { name = "sqlmodel" },
     { name = "uvicorn" },
@@ -336,6 +337,7 @@ dev = [
 requires-dist = [
     { name = "fastapi", specifier = ">=0.136.3" },
     { name = "jinja2", specifier = ">=3.1.6" },
+    { name = "pydantic", specifier = ">=2.13.4" },
     { name = "python-multipart", specifier = ">=0.0.29" },
     { name = "sqlmodel", specifier = ">=0.0.38" },
     { name = "uvicorn", specifier = ">=0.48.0" },
