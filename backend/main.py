@@ -11,7 +11,7 @@ async def lifespan(app: FastAPI):
     yield
 
 
-app = FastAPI(title="Cukiernia Clicker")
+app = FastAPI(title="Cukiernia Clicker", lifespan=lifespan)
 
 app.include_router(router)
 
