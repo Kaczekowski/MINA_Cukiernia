@@ -46,6 +46,4 @@ fix: out-of-bounds bug
 
 ## 4. Miscellaneous
 
-1. All application source files should be inside `/src/cukiernia/`
-2. Avoid pushing images/audio files/other auxiliary files into the repository
-3. Keep correct naming conventions (PEP8)
+Keep correct naming conventions (PEP8)
