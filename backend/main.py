@@ -5,6 +5,7 @@ from backend.db.session import init_db
 from backend.api.router import router
 from fastapi.middleware.cors import CORSMiddleware
 
+
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     init_db()
