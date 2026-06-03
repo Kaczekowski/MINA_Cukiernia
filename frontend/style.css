@@ -22,7 +22,7 @@ body {
 }
 
 .game-container {
-    width: min(520px, calc(100% - 32px));
+    width: min(640px, calc(100% - 32px));
 }
 
 .statsPanel {
@@ -53,8 +53,42 @@ body {
     font-size: 24px;
 }
 
+.cookieStage {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+    align-items: center;
+    gap: 20px;
+    width: 100%;
+}
+
+.cookieSide {
+    display: flex;
+    align-items: center;
+    min-width: 0;
+}
+
+.cookieSideLeft {
+    justify-content: flex-end;
+}
+
+.cookieSideRight {
+    justify-content: flex-start;
+}
+
+.aniaGotujeImage {
+    width: min(140px, 100%);
+    max-height: 190px;
+    object-fit: contain;
+    border-radius: 18px;
+    filter: drop-shadow(0 10px 16px rgba(0, 0, 0, 0.18));
+}
+
+.aniaGotujeImage[hidden] {
+    display: none;
+}
+
 .cookieButton {
-    align-self: center;
+    justify-self: center;
     width: min(300px, 70vw);
     aspect-ratio: 1;
     border: 10px solid #8f5a2f;
@@ -141,6 +175,20 @@ body {
 
 h1 {
     margin-bottom: 20px;
+}
+
+@media (max-width: 700px) {
+    .cookieStage {
+        grid-template-columns: 1fr;
+    }
+
+    .cookieSideLeft {
+        justify-content: center;
+    }
+
+    .cookieSideRight {
+        display: none;
+    }
 }
 
 @media (max-width: 560px) {

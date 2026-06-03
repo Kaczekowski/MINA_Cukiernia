@@ -2,6 +2,10 @@ function openShop() {
     window.location.href = "/shop.html";
 }
 
+const API_URL = "/game";
+const ANIA_UPGRADE_NAME = "Ania Gotuje";
+const ANIA_IMAGE_SRC = "/ania-gotuje.png";
+
 const initialGameState = {
     money: 0,
     total_clicks: 0,
@@ -33,6 +37,46 @@ function renderGameState() {
     );
 }
 
+function renderAniaGotujeImage(isVisible) {
+    const image = document.getElementById("aniaGotujeImage");
+
+    if (!image) {
+        return;
+    }
+
+    if (isVisible) {
+        image.src = ANIA_IMAGE_SRC;
+        image.hidden = false;
+    } else {
+        image.hidden = true;
+    }
+}
+
+function normalizeUpgradeName(name) {
+    return String(name).trim().toLowerCase();
+}
+
+async function loadAniaGotujeStatus() {
+    try {
+        const response = await fetch(`${API_URL}/upgrades`);
+
+        if (!response.ok) {
+            throw new Error("Nie udało się pobrać ulepszeń.");
+        }
+
+        const upgrades = await response.json();
+        const aniaGotuje = upgrades.find(
+            (upgrade) =>
+                normalizeUpgradeName(upgrade.name) ===
+                normalizeUpgradeName(ANIA_UPGRADE_NAME),
+        );
+
+        renderAniaGotujeImage(Boolean(aniaGotuje && aniaGotuje.quantity > 0));
+    } catch (error) {
+        console.error(error);
+    }
+}
+
 async function loadSave() {
     try {
         const response = await fetch("/save/");
@@ -59,7 +103,7 @@ async function handleCookieClick() {
     button.disabled = true;
 
     try {
-        const response = await fetch("/game/click", {
+        const response = await fetch(`${API_URL}/click`, {
             method: "POST",
         });
 
@@ -86,7 +130,7 @@ async function collectAutoIncome() {
     }
 
     try {
-        const response = await fetch("/game/tick", {
+        const response = await fetch(`${API_URL}/tick`, {
             method: "POST",
         });
 
@@ -118,5 +162,6 @@ window.addEventListener("DOMContentLoaded", () => {
         .addEventListener("click", handleCookieClick);
     renderGameState();
     loadSave();
+    loadAniaGotujeStatus();
     startAutoIncome();
 });
