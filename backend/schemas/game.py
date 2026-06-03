@@ -4,6 +4,14 @@ from pydantic import BaseModel
 class ClickOut(BaseModel):
     money: float
     total_clicks: int
+    cookies_per_second: float
+
+    model_config = {"from_attributes": True}
+
+
+class TickOut(BaseModel):
+    money: float
+    cookies_per_second: float
 
     model_config = {"from_attributes": True}
 

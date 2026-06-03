@@ -9,6 +9,7 @@ const initialGameState = {
 };
 
 let gameState = { ...initialGameState };
+let autoIncomeIntervalId = null;
 
 function formatNumber(value, maximumFractionDigits = 2) {
     return new Intl.NumberFormat("pl-PL", {
@@ -69,6 +70,7 @@ async function handleCookieClick() {
         const result = await response.json();
         gameState.money = result.money;
         gameState.total_clicks = result.total_clicks;
+        gameState.cookies_per_second = result.cookies_per_second;
         renderGameState();
         setStatus();
     } catch (error) {
@@ -78,10 +80,43 @@ async function handleCookieClick() {
     }
 }
 
+async function collectAutoIncome() {
+    if (gameState.cookies_per_second <= 0) {
+        return;
+    }
+
+    try {
+        const response = await fetch("/game/tick", {
+            method: "POST",
+        });
+
+        if (!response.ok) {
+            throw new Error("Nie udało się naliczyć CPS.");
+        }
+
+        const result = await response.json();
+        gameState.money = result.money;
+        gameState.cookies_per_second = result.cookies_per_second;
+        renderGameState();
+        setStatus();
+    } catch (error) {
+        setStatus(error.message);
+    }
+}
+
+function startAutoIncome() {
+    if (autoIncomeIntervalId !== null) {
+        clearInterval(autoIncomeIntervalId);
+    }
+
+    autoIncomeIntervalId = setInterval(collectAutoIncome, 1000);
+}
+
 window.addEventListener("DOMContentLoaded", () => {
     document
         .getElementById("cookieButton")
         .addEventListener("click", handleCookieClick);
     renderGameState();
     loadSave();
+    startAutoIncome();
 });

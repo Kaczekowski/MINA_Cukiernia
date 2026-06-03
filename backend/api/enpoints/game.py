@@ -2,7 +2,7 @@ from fastapi import APIRouter, Depends, HTTPException
 from sqlmodel import Session
 
 from backend.db.session import get_db
-from backend.schemas.game import ClickOut, BuyUpgradeOut, UpgradeOut
+from backend.schemas.game import BuyUpgradeOut, ClickOut, TickOut, UpgradeOut
 from backend.services import game as game_service
 
 router = APIRouter(prefix="/game", tags=["game"])
@@ -11,7 +11,20 @@ router = APIRouter(prefix="/game", tags=["game"])
 @router.post("/click", response_model=ClickOut)
 def click(db: Session = Depends(get_db)):
     player = game_service.handle_click(db)
-    return ClickOut(money=player.money, total_clicks=player.total_clicks)
+    return ClickOut(
+        money=player.money,
+        total_clicks=player.total_clicks,
+        cookies_per_second=player.cookies_per_second,
+    )
+
+
+@router.post("/tick", response_model=TickOut)
+def tick(db: Session = Depends(get_db)):
+    player = game_service.handle_tick(db)
+    return TickOut(
+        money=player.money,
+        cookies_per_second=player.cookies_per_second,
+    )
 
 
 @router.post("/buy/{upgrade_id}", response_model=BuyUpgradeOut)

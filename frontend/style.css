@@ -54,6 +54,7 @@ body {
 }
 
 .cookieButton {
+    align-self: center;
     width: min(300px, 70vw);
     aspect-ratio: 1;
     border: 10px solid #8f5a2f;

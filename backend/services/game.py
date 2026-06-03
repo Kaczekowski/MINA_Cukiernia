@@ -7,16 +7,18 @@ from backend.services.save import get_or_create_player
 
 
 def get_click_value(player: Player, db: Session) -> float:
-    """Bazowa wartość kliknięcia to 1, plus bonusy z ulepszeni."""
+    """Bazowa wartość kliknięcia to 1, plus bonusy z ulepszeń."""
     base = 1.0
     upgrades = db.exec(
         select(PlayerUpgrade).where(PlayerUpgrade.player_id == player.id)
     ).all()
-    bonus = sum(
-        db.get(Upgrade, pu.upgrade_id).click_bonus * pu.quantity
-        for pu in upgrades
-        if db.get(Upgrade, pu.upgrade_id) is not None
-    )
+    bonus = 0.0
+
+    for player_upgrade in upgrades:
+        upgrade = db.get(Upgrade, player_upgrade.upgrade_id)
+        if upgrade is not None:
+            bonus += upgrade.click_bonus * player_upgrade.quantity
+
     return base + bonus
 
 
@@ -25,6 +27,16 @@ def handle_click(db: Session):
     click_value = get_click_value(player, db)
     player.money += click_value
     player.total_clicks += 1
+    db.add(player)
+    db.commit()
+    db.refresh(player)
+    return player
+
+
+def handle_tick(db: Session):
+    """Dodaje automatyczny przychód wynikający z CPS."""
+    player = get_or_create_player(db)
+    player.money += player.cookies_per_second
     db.add(player)
     db.commit()
     db.refresh(player)
@@ -93,20 +105,19 @@ def buy_upgrade(db: Session, upgrade_id: int):
 
 
 def _recalc_cps(player: Player, db: Session, updated: PlayerUpgrade) -> float:
-    """Przelicza cookies_per_second na podstawie wszystkich ulepszeni gracza."""
+    """Przelicza cookies_per_second na podstawie wszystkich ulepszeń gracza."""
     all_upgrades = db.exec(
         select(PlayerUpgrade).where(PlayerUpgrade.player_id == player.id)
     ).all()
 
-    # Podmień zaktualizowany rekord w liście (przed commitem)
     merged = {pu.upgrade_id: pu.quantity for pu in all_upgrades}
     merged[updated.upgrade_id] = updated.quantity
 
     total = 0.0
-    for uid, qty in merged.items():
-        upg = db.get(Upgrade, uid)
-        if upg:
-            total += upg.income_per_second * qty
+    for upgrade_id, quantity in merged.items():
+        upgrade = db.get(Upgrade, upgrade_id)
+        if upgrade:
+            total += upgrade.income_per_second * quantity
     return total
 
 
@@ -122,20 +133,20 @@ def list_upgrades(db: Session):
     }
 
     result = []
-    for upg in upgrades:
-        qty = owned.get(upg.id, 0)
+    for upgrade in upgrades:
+        quantity = owned.get(upgrade.id, 0)
         result.append(
             {
-                "id": upg.id,
-                "name": upg.name,
-                "description": upg.description,
-                "icon": upg.icon,
-                "base_cost": upg.base_cost,
-                "cost_scaling": upg.cost_scaling,
-                "income_per_second": upg.income_per_second,
-                "click_bonus": upg.click_bonus,
-                "current_cost": compute_upgrade_cost(upg, qty),
-                "quantity": qty,
+                "id": upgrade.id,
+                "name": upgrade.name,
+                "description": upgrade.description,
+                "icon": upgrade.icon,
+                "base_cost": upgrade.base_cost,
+                "cost_scaling": upgrade.cost_scaling,
+                "income_per_second": upgrade.income_per_second,
+                "click_bonus": upgrade.click_bonus,
+                "current_cost": compute_upgrade_cost(upgrade, quantity),
+                "quantity": quantity,
             }
         )
     return result
