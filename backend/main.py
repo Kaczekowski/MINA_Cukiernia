@@ -1,14 +1,22 @@
 from contextlib import asynccontextmanager
+from pathlib import Path
+
 from fastapi import FastAPI
-from fastapi.staticfiles import StaticFiles
-from backend.db.session import init_db
-from backend.api.router import router
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.staticfiles import StaticFiles
+
+from backend.api.router import router
+from backend.db.session import init_db
+from backend.utils.seed import seed_upgrades
+
+BASE_DIR = Path(__file__).resolve().parent.parent
+FRONTEND_DIR = BASE_DIR / "frontend"
 
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     init_db()
+    seed_upgrades()
     yield
 
 
@@ -33,4 +41,4 @@ def check_health():
     return {"status": "ok"}
 
 
-app.mount("/", StaticFiles(directory="frontend", html=True), name="frontend")
+app.mount("/", StaticFiles(directory=FRONTEND_DIR, html=True), name="frontend")

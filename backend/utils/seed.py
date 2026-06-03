@@ -96,25 +96,24 @@ UPGRADES = [
     ),
 ]
 
-
 def seed_upgrades():
     with Session(engine) as db:
-        existing = db.exec(select(Upgrade)).all()
-        if existing:
-            print("Upgrady już istnieją, pomijam seed.")
+        existing_upgrade = db.exec(select(Upgrade)).first()
+
+        if existing_upgrade is not None:
             return
 
         for upgrade in UPGRADES:
             db.add(upgrade)
+
         db.commit()
-        print(f"Dodano {len(UPGRADES)} upgradów.")
 
 
 if __name__ == "__main__":
-    import backend.models.player  # noqa
-    import backend.models.stats  # noqa
-    import backend.models.upgrade  # noqa
-    import backend.models.player_upgrade  # noqa
+    import backend.models.player  # noqa: F401
+    import backend.models.player_upgrade  # noqa: F401
+    import backend.models.stats  # noqa: F401
+    import backend.models.upgrade  # noqa: F401
     from sqlmodel import SQLModel
 
     SQLModel.metadata.create_all(engine)
