@@ -5,7 +5,7 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100vh;
+    min-height: 100vh;
 }
 
 .container {
@@ -13,7 +13,64 @@ body {
     background: white;
     padding: 40px;
     border-radius: 16px;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    max-height: 90vh;
+    overflow-y: auto;
+}
+
+.upgradeDiv {
+    font-size: 16px;
+    background: #f7d9e3;
+    padding: 16px;
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    text-align: left;
+}
+
+.upgradeContent h3 {
+    margin: 0 0 8px;
+    font-size: 20px;
+}
+
+.upgradeContent p {
+    margin: 4px 0;
+}
+
+.upgradeIcon {
+    display: inline-block;
+    font-size: 24px;
+    line-height: 1;
+    margin-right: 6px;
+    vertical-align: middle;
+}
+
+.button {
+    text-align: center;
+    background: white;
+    border-radius: 20px;
+    font-size: 24px;
+    padding: 10px 16px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+}
+
+.smallbutton {
+    text-align: center;
+    background: white;
+    border-radius: 12px;
+    font-size: 16px;
+    padding: 8px 12px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+    flex-shrink: 0;
 }
 
 h1 {

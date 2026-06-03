@@ -33,7 +33,7 @@ def handle_click(db: Session):
 
 def compute_upgrade_cost(upgrade: Upgrade, quantity: int) -> float:
     """Cena rośnie wykładniczo: base_cost * scaling ^ quantity."""
-    return upgrade.base_cost * (upgrade.cost_scaling ** quantity)
+    return upgrade.base_cost * (upgrade.cost_scaling**quantity)
 
 
 def buy_upgrade(db: Session, upgrade_id: int):
@@ -124,16 +124,18 @@ def list_upgrades(db: Session):
     result = []
     for upg in upgrades:
         qty = owned.get(upg.id, 0)
-        result.append({
-            "id": upg.id,
-            "name": upg.name,
-            "description": upg.description,
-            "icon": upg.icon,
-            "base_cost": upg.base_cost,
-            "cost_scaling": upg.cost_scaling,
-            "income_per_second": upg.income_per_second,
-            "click_bonus": upg.click_bonus,
-            "current_cost": compute_upgrade_cost(upg, qty),
-            "quantity": qty,
-        })
+        result.append(
+            {
+                "id": upg.id,
+                "name": upg.name,
+                "description": upg.description,
+                "icon": upg.icon,
+                "base_cost": upg.base_cost,
+                "cost_scaling": upg.cost_scaling,
+                "income_per_second": upg.income_per_second,
+                "click_bonus": upg.click_bonus,
+                "current_cost": compute_upgrade_cost(upg, qty),
+                "quantity": qty,
+            }
+        )
     return result
