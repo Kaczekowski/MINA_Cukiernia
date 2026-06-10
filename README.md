@@ -201,6 +201,32 @@ Pipeline wykonuje:
 
 Dzięki temu łatwiej utrzymać jednolity styl kodu i uniknąć błędów przed mergem zmian.
 
+## Zrzuty ekranu
+
+### Start gry
+
+![Start gry](docs/screenshots/game_start.png)
+
+### Gra w trakcie
+
+![Gra w trakcie](docs/screenshots/game_played.png)
+
+### Sklep — start
+
+![Sklep — start](docs/screenshots/shop_start.png)
+
+### Sklep — po zakupach
+
+![Sklep — po zakupach](docs/screenshots/shop_played.png)
+
+### Końcowe produkty
+
+![Końcowe produkty](docs/screenshots/end_game_products.png)
+
+## Dokumentacja
+
+- [Architektura](docs/architecture.md) — warstwy aplikacji, struktura katalogów, model danych, przepływ żądania
+- [Endpointy API](docs/endpoints.md) — lista wszystkich endpointów z opisami, schematami i przykładami curl
 
 
 
